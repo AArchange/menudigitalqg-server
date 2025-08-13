@@ -20,7 +20,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-  }
+  }, 
+  logo: { 
+    type: String, 
+    required: false 
+  }, // Le logo est ici
+  themeColor: { 
+    type: String, 
+    required: false, 
+    default: '#4f46e5' 
+  }, // La couleur est ici
 }, {
   timestamps: true,
 });

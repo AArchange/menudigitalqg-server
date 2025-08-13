@@ -35,15 +35,6 @@ const dishSchema = new mongoose.Schema({
     type: String,
     required: false, // Une image n'est pas obligatoire
   },
-  logo: {
-    type: String, // On stockera l'URL de l'image du logo
-    required: false,
-  },
-  themeColor: {
-    type: String, // On stockera un code couleur hexadécimal, ex: "#ff5733"
-    required: false,
-    default: '#4f46e5', // Une couleur par défaut (indigo)
-  },
 }, {
   timestamps: true,
 });
