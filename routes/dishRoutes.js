@@ -105,23 +105,29 @@ router.patch('/:id/toggle', protect, async (req, res) => {
 // Route Publique (pas besoin d'être connecté)
 // ====================================================================
 
-// @desc    Récupérer le menu d'un restaurant par son slug
+// @desc    Récupérer le menu public d'un restaurant par son slug
 // @route   GET /api/dishes/menu/:slug
 router.get('/menu/:slug', async (req, res) => {
   try {
-    // 1. Trouver l'utilisateur (le restaurant) grâce à son slug
     const user = await User.findOne({ restaurantSlug: req.params.slug });
-
     if (!user) {
       return res.status(404).json({ message: 'Restaurant non trouvé' });
     }
 
-    // 2. Trouver tous les plats qui appartiennent à cet utilisateur
     const dishes = await Dish.find({ user: user._id });
-    res.json(dishes);
+
+    // On renvoie un objet complet !
+    res.json({
+      restaurant: {
+        restaurantName: user.restaurantName,
+        logo: user.logo,
+        themeColor: user.themeColor,
+      },
+      dishes: dishes,
+    });
     
   } catch (error) {
-    res.status(500).json({ message: "Erreur serveur lors de la récupération du menu" });
+    res.status(500).json({ message: "Erreur serveur" });
   }
 });
 
