@@ -41,6 +41,7 @@ router.post('/register', async (req, res) => {
         email: user.email,
         restaurantSlug: user.restaurantSlug, // <-- LA CORRECTION EST ICI
         token: generateToken(user._id),
+        menuViewCount: user.menuViewCount // <-- AJOUTER ICI
       });
     } else {
       res.status(400).json({ message: 'Données utilisateur invalides' });
@@ -64,6 +65,7 @@ router.post('/login', async (req, res) => {
         email: user.email,
         restaurantSlug: user.restaurantSlug,
         token: generateToken(user._id),
+        menuViewCount: user.menuViewCount 
       });
     } else {
       res.status(401).json({ message: 'Email ou mot de passe incorrect' });

@@ -30,6 +30,11 @@ const userSchema = new mongoose.Schema({
     required: false, 
     default: '#4f46e5' 
   }, // La couleur est ici
+    menuViewCount: {
+    type: Number,
+    required: true,
+    default: 0, // Le compteur commence à 0
+  },
 }, {
   timestamps: true,
 });

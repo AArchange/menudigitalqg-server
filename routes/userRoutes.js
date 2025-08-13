@@ -50,4 +50,24 @@ router.put('/profile', protect, async (req, res) => {
   }
 });
 
+// @desc    Incrémenter le compteur de vues pour un menu public
+// @route   PATCH /api/users/menu/:slug/view
+router.patch('/menu/:slug/view', async (req, res) => {
+  try {
+    // On trouve l'utilisateur par son slug et on incrémente son compteur de 1
+    // L'option { new: true } n'est pas nécessaire ici car on ne renvoie rien
+    await User.findOneAndUpdate(
+      { restaurantSlug: req.params.slug },
+      { $inc: { menuViewCount: 1 } }
+    );
+    // On renvoie un statut 204 "No Content", car on n'a pas besoin de renvoyer de données.
+    // C'est une requête "fire-and-forget".
+    res.status(204).send();
+  } catch (error) {
+    // Même si ça échoue, on ne veut pas planter le menu public, donc on renvoie quand même un succès vide.
+    res.status(204).send();
+  }
+});
+
+
 module.exports = router;
