@@ -10,6 +10,8 @@ const cors = require('cors');
 const connectDB = require('./config/db');
 const dishRoutes = require('./routes/dishRoutes');
 const authRoutes = require('./routes/authRoutes'); // On importe bien les routes d'authentification
+const userRoutes = require('./routes/userRoutes'); 
+
 
 // 3. CONNECTER LA BASE DE DONNÉES
 connectDB();
@@ -33,6 +35,9 @@ app.use('/api/dishes', dishRoutes);
 
 // Routes pour l'authentification (préfixe /api/auth)
 app.use('/api/auth', authRoutes);
+
+app.use('/api/users', userRoutes); 
+
 
 // 7. DÉMARRER LE SERVEUR
 app.listen(PORT, () => {
