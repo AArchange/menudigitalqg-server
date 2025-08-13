@@ -12,13 +12,14 @@ const { protect } = require('../middleware/authMiddleware'); // On importe notre
 // @route   POST /api/dishes
 router.post('/', protect, async (req, res) => {
   try {
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, image  } = req.body;
     const newDish = new Dish({
       user: req.user._id, // On lie le plat à l'ID de l'utilisateur qui fait la requête
       name,
       description,
       price,
       category,
+      image
     });
     const createdDish = await newDish.save();
     res.status(201).json(createdDish);
@@ -42,7 +43,7 @@ router.get('/', protect, async (req, res) => {
 // @route   PUT /api/dishes/:id
 router.put('/:id', protect, async (req, res) => {
   try {
-    const { name, description, price, category } = req.body;
+    const { name, description, price, category, image } = req.body;
     const dish = await Dish.findById(req.params.id);
 
     // Vérification de sécurité : le plat existe ET il appartient bien à l'utilisateur connecté
@@ -51,6 +52,8 @@ router.put('/:id', protect, async (req, res) => {
       dish.description = description || dish.description;
       dish.price = price || dish.price;
       dish.category = category || dish.category;
+      dish.image = image; // On met à jour l'image. Si 'image' est vide, ça l'effacera.
+
       
       const updatedDish = await dish.save();
       res.json(updatedDish);

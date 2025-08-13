@@ -31,6 +31,10 @@ const dishSchema = new mongoose.Schema({
     required: true,
     default: true, // Très important : tout nouveau plat sera disponible par défaut
   },
+  image: {
+    type: String,
+    required: false, // Une image n'est pas obligatoire
+  },
 }, {
   timestamps: true,
 });
