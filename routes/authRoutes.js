@@ -75,4 +75,37 @@ router.post('/login', async (req, res) => {
   }
 });
 
+// @desc    Vérifier une transaction Kkiapay et activer un abonnement
+// @route   POST /api/payments/verify
+router.post('/verify', protect, async (req, res) => {
+  const { transactionId } = req.body;
+  const user = await User.findById(req.user._id);
+
+  try {
+    // Étape 1 : Appeler l'API de Kkiapay pour vérifier la transaction
+    // (Ceci est un pseudo-code, il faudra voir la doc de Kkiapay)
+    const kkiapayResponse = await axios.post('https://api.kkiapay.com/api/v1/transactions/verify', 
+      { transaction_id: transactionId },
+      { headers: { 'Authorization': `Bearer ${process.env.KKIAPAY_SECRET_KEY}` } }
+    );
+
+    // Étape 2 : Si Kkiapay confirme que le paiement est "SUCCESS"
+    if (user && kkiapayResponse.data.status === 'SUCCESS') {
+      user.subscriptionStatus = 'actif';
+      // On calcule la date d'expiration (ex: 30 jours à partir de maintenant)
+      const now = new Date();
+      user.subscriptionExpiresAt = new Date(now.setDate(now.getDate() + 30));
+      user.kkiapayTransactionId = transactionId;
+      
+      await user.save();
+      res.json({ message: 'Abonnement activé avec succès !' });
+    } else {
+      throw new Error('Transaction invalide ou échouée.');
+    }
+
+  } catch (error) {
+    res.status(400).json({ message: "La vérification du paiement a échoué." });
+  }
+});
+
 module.exports = router;

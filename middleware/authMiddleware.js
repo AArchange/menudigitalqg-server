@@ -26,4 +26,20 @@ const protect = async (req, res, next) => {
   }
 };
 
+ // Nouvelle vérification :
+  const user = await User.findById(decoded.id).select('-password');
+  if (user.subscriptionStatus !== 'actif') {
+    return res.status(403).json({ message: 'Abonnement inactif. Veuillez vous abonner.' });
+  }
+
+  // Vérifier si l'abonnement n'a pas expiré
+  if (user.subscriptionExpiresAt && new Date() > user.subscriptionExpiresAt) {
+    user.subscriptionStatus = 'expiré';
+    await user.save();
+    return res.status(403).json({ message: 'Votre abonnement a expiré.' });
+  }
+
+  req.user = user;
+  next();
+
 module.exports = { protect };

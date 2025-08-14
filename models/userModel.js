@@ -35,6 +35,23 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 0, // Le compteur commence à 0
   },
+   subscriptionType: {
+    type: String,
+    enum: ['gratuit', 'mensuel', 'annuel'],
+    default: 'gratuit',
+  },
+  subscriptionStatus: {
+    type: String,
+    enum: ['actif', 'inactif', 'expiré'],
+    default: 'actif', // On peut donner une période d'essai gratuite
+  },
+  subscriptionExpiresAt: {
+    type: Date, // La date d'expiration de l'abonnement
+    default: () => new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+  },
+  kkiapayTransactionId: {
+    type: String, // Pour garder une trace de la dernière transaction
+  },
 }, {
   timestamps: true,
 });
