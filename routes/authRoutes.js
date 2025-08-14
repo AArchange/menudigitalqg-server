@@ -132,7 +132,7 @@ router.post('/login', async (req, res) => {
 
 // @desc    Vérifier le token de l'utilisateur connecté
 // @route   GET /api/auth/me
-router.get('/me', protect, async (req, res) => {
+router.get('/profile', protect, async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
     res.json({

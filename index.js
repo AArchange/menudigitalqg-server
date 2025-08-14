@@ -9,11 +9,8 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/db');
 const dishRoutes = require('./routes/dishRoutes');
-const authRoutes = require('./routes/authRoutes'); // On importe bien les routes d'authentification
-const userRoutes = require('./routes/userRoutes'); 
+const authRoutes = require('./routes/authRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
-
-
 
 // 3. CONNECTER LA BASE DE DONNÉES
 connectDB();
@@ -22,27 +19,18 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// 5. APPLIQUER LES MIDDLEWARES (indispensable AVANT les routes)
+// 5. APPLIQUER LES MIDDLEWARES
 app.use(cors());
 app.use(express.json());
 
 // 6. DÉFINIR LES ROUTES
-// Route de test simple
 app.get('/', (req, res) => {
   res.send('API du Menu Digital QG fonctionne !');
 });
 
-// Routes pour les plats (préfixe /api/dishes)
 app.use('/api/dishes', dishRoutes);
-
-// Routes pour l'authentification (préfixe /api/auth)
-app.use('/api/auth', authRoutes);
-
-app.use('/api/users', userRoutes);
-
-app.use('/api/payments', paymentRoutes);
-
-
+app.use('/api/auth', authRoutes); // Contient register, login, et profile
+app.use('/api/payments', paymentRoutes); // Contient la vérification de paiement
 
 // 7. DÉMARRER LE SERVEUR
 app.listen(PORT, () => {
